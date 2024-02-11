@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
 	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 )
@@ -31,6 +33,19 @@ func GetRedisClient(lgr *log.Logger, config *RedisConfig) *redis.Client {
 
 func GetAppConfig(filename, path string) *Config {
 	return loadConfig(filename, path)
+}
+
+func InitRouters() *chi.Mux {
+	r := chi.NewRouter()
+	// setup cors here ...
+	r.Use(
+		middleware.RequestID,
+		middleware.RealIP,
+		middleware.Logger,
+		middleware.Recoverer,
+		middleware.Heartbeat("/health"),
+	)
+	return r
 }
 
 func loadConfig(filename, path string) *Config {
