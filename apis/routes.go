@@ -1,19 +1,19 @@
 package apis
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	v1 "github.com/sant470/moviesearch/apis/v1"
+	"github.com/sant470/moviesearch/utils/errors"
 )
 
-type Handler func(rw http.ResponseWriter, r *http.Request) error
+type Handler func(rw http.ResponseWriter, r *http.Request) *errors.AppError
 
 func (h Handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if err := h(rw, r); err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(rw, "%s: error %s", "Internal Server Error", err.Error())
+		rw.Write([]byte(err.Message))
 	}
 }
 

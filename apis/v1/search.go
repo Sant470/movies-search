@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/sant470/moviesearch/services"
+	"github.com/sant470/moviesearch/utils/errors"
+	"github.com/sant470/moviesearch/utils/res"
 )
 
 type SearchHandler struct {
@@ -16,7 +18,6 @@ func NewSearchHandler(lgr *log.Logger, svc *services.SearchService) *SearchHandl
 	return &SearchHandler{lgr, svc}
 }
 
-func (sh *SearchHandler) HelloWorld(rw http.ResponseWriter, r *http.Request) error {
-	rw.Write([]byte("hello World"))
-	return nil
+func (sh *SearchHandler) HelloWorld(rw http.ResponseWriter, r *http.Request) *errors.AppError {
+	return res.OK(rw, "hello, world!")
 }
